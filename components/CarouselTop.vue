@@ -1,35 +1,37 @@
 <template>
   <div class="carousel-top">
-    <div class="carousel-top_content">
-      <span>
-        <buton>prev</buton>
+    <div class="carousel-top_body">
+      <span class="carousel-top_body_btn">
+        <button @click="back()" :disabled="visibleContent == 0">PREV</button>
       </span>
-      <span>
-        <transition-group :name="transitionGroupName">
-          <div
-            v-for="(item, index) in contents"
-            v-show="visibleContent == index"
-            :style="{ backgroundColor: item.bg_color }"
-            :key="item.title"
-            class="carousel-top_body"
-          >
-            {{ item.title }}
-          </div>
-        </transition-group>
+      <transition-group
+        :name="transitionGroupName"
+        class="carousel-top_body_images"
+      >
+        <img
+          v-for="(item, index) in contents"
+          v-show="visibleContent == index"
+          :key="item.title"
+          :src="item.image"
+          class="carousel-top_body_image"
+        />
+      </transition-group>
+      <span class="carousel-top_body_btn">
+        <button
+          @click="next()"
+          :disabled="visibleContent == contents.length - 1"
+        >
+          NEXT
+        </button>
       </span>
-      <span></span>
     </div>
     <div class="carousel-top_footer">
-      <button @click="back()" :disabled="visibleContent == 0">PREV</button>
       <div
         class="carousel-top_footer_dot"
         v-for="(item, index) in contents"
         :key="item.title"
         :class="{ 'is-visible': visibleContent == index }"
       ></div>
-      <button @click="next()" :disabled="visibleContent == contents.length - 1">
-        NEXT
-      </button>
     </div>
   </div>
 </template>
@@ -41,15 +43,19 @@ export default {
       contents: [
         {
           title: 'Content 1',
-          bg_color: '#7bbff9',
+          image: '/images/image1.jpg',
         },
         {
           title: 'Content 2',
-          bg_color: '#f16972',
+          image: '/images/image2.jpg',
         },
         {
           title: 'Content 3',
-          bg_color: '#20d2a3',
+          image: '/images/image3.jpg',
+        },
+        {
+          title: 'Content 4',
+          image: '/images/image4.jpg',
         },
       ],
       transitionGroupName: 'show-next',
@@ -69,35 +75,55 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .carousel-top {
+  line-height: 20vh;
   height: 50vh;
-  width: 80vh;
+  width: 50vw;
   overflow: hidden;
   position: relative;
+  // display: flex;
+  // justify-content: center;
   &_body {
-    color: #fff;
-    height: 80%;
-    left: 0;
-    line-height: 40vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     position: absolute;
-    text-align: center;
     top: 0%;
-    left: 0%;
-    right: 0%;
-    bottom: 0%;
-    margin: auto;
-    width: 80%;
+    width: 100%;
+    height: 100%;
+    &_btn {
+      height: 30vh;
+      top: 0%;
+      left: 0%;
+      right: 0%;
+      bottom: 0%;
+      margin: auto;
+    }
+    &_images {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &_image {
+      width: 40vw;
+      height: 40vh;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
+
   &_footer {
     align-items: center;
     display: flex;
-    height: 45vh;
+    height: auto;
     justify-content: space-between;
     position: absolute;
-    top: 50%;
-    left: 10%;
-    width: 80%;
+    top: 85%;
+    left: 38%;
+    width: 24%;
     &_dot {
       background-color: #abc2ce;
       border-radius: 50%;
@@ -119,7 +145,7 @@ export default {
 }
 .show-next-enter,
 .show-prev-leave-to {
-  transform: translate(100%);
+  transform: translateX(100%);
 }
 .show-next-leave-to,
 .show-prev-enter {
